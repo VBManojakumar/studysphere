@@ -1,0 +1,198 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #f2f7ff;
+}
+
+/* HEADER */
+.top-header {
+  background: #001F54;
+  color: white;
+  padding: 20px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.top-header h2 {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.back-btn {
+  text-decoration: none;
+  color: white;
+  background: #ff7a00;
+  padding: 10px 18px;
+  border-radius: 15px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.back-btn:hover {
+  background: #ff5200;
+transform: translateY(-2px);     /* Slight lift */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+
+}
+
+.logout-btn {
+    background: #ff7a00;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;                 /* 👈 Shows hand cursor */
+    transition: 0.3s ease;
+}
+
+.logout-btn:hover {
+    background: #ff5200;             /* 🔥 Hover effect */
+    transform: translateY(-2px);     /* Slight lift */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+
+/* CONTAINER GRID */
+.resource-container {
+  padding: 50px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 25px;
+}
+
+/* CARDS */
+.resource-card {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  transition: 0.3s;
+}
+
+.resource-card:hover {
+  transform: translateY(-10px);
+}
+
+.resource-card h3 {
+  font-size: 22px;
+  margin-bottom: 15px;
+  color: #001F54;
+}
+
+.resource-card p {
+  color: #555;
+  margin-bottom: 20px;
+}
+
+/* BUTTONS */
+.view-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background: #ff7a00;
+  color: white;
+  text-decoration: none;
+  border-radius: 20px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.view-btn:hover {
+  background: #ff5200;
+}
+
+/* ============================= */
+/*   FILE LIST PAGE UI (NEW)     */
+/* ============================= */
+
+.file-list-container {
+  padding: 40px 60px;
+}
+
+.file-card {
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  transition: 0.3s;
+}
+
+.file-card:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+.file-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #001F54;
+  margin-bottom: 8px;
+}
+
+.file-description {
+  color: #555;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.file-btn {
+  display: inline-block;
+  padding: 8px 14px;
+  background: #001F54;
+  color: white;
+  text-decoration: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.file-btn:hover {
+  background: #ff7a00;
+}
+
+
+/* ================= CARD HOVER ANIMATION ================= */
+.resource-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.resource-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Button hover */
+.view-btn {
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.view-btn:hover {
+  transform: scale(1.05);
+}
+
+/* ================= PAGE LOAD ANIMATION ================= */
+body {
+  animation: pageFade 0.6s ease-in-out;
+}
+
+@keyframes pageFade {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+

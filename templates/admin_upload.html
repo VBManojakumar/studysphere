@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Upload | StudySphere</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+    }
+
+    .admin-card {
+      background: #ffffff;
+      width: 420px;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      animation: slideUp 0.6s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #203a43;
+    }
+
+    label {
+      font-size: 14px;
+      color: #444;
+      margin-top: 12px;
+      display: block;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px 12px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      outline: none;
+      font-size: 14px;
+    }
+
+    input:focus, select:focus {
+      border-color: #ff8c00;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 20px;
+      padding: 12px;
+      background: linear-gradient(135deg, #ff8c00, #ff5e00);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(255,140,0,0.4);
+    }
+
+    .delete-btn {
+      color: red;
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    .delete-btn:hover {
+      text-decoration: underline;
+    }
+  </style>
+
+</head>
+<body>
+
+<div class="admin-card">
+<h2>Admin Upload Panel</h2>
+
+<form action="/admin/upload" method="POST" class="upload-form">
+
+  <label>Category</label>
+  <select name="category" required>
+    <option value="materials">Materials</option>
+    <option value="videos">Videos</option>
+    <option value="papers">Papers</option>
+    <option value="coding">Coding</option>
+    <option value="aptitude">Aptitude</option>
+    <option value="interview">Interview</option>
+  </select>
+
+  <label>Branch (Only for Materials & Papers)</label>
+  <input type="text" name="branch" placeholder="BCA / BSc / BTech">
+
+  <label>Semester (Only for Materials & Papers)</label>
+  <input type="number" name="sem" placeholder="1 to 6">
+
+  <label>Title</label>
+  <input type="text" name="title" required>
+
+  <label>Google Drive / Video Link</label>
+  <input type="url" name="file_url" required>
+
+  <button type="submit">🚀 Upload Resource</button>
+
+</form>
+
+<hr style="margin:30px 0;">
+
+<h3 style="text-align:center; color:#203a43;">📄 Upload History</h3>
+
+<div style="max-height:260px; overflow-y:auto; margin-top:15px;">
+  <table style="width:100%; border-collapse:collapse; font-size:13px;">
+    <thead>
+      <tr style="background:#203a43; color:white;">
+        <th style="padding:8px;">Category</th>
+        <th>Branch</th>
+        <th>Sem</th>
+        <th>Title</th>
+        <th>Link</th>
+        <th>Date</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for item in uploads %}
+      <tr style="border-bottom:1px solid #ddd;">
+        <td style="padding:6px;">{{ item.category }}</td>
+        <td>{{ item.branch or '-' }}</td>
+        <td>{{ item.sem or '-' }}</td>
+        <td>{{ item.title }}</td>
+        <td>
+          <a href="{{ item.file_url }}" target="_blank">Open</a>
+        </td>
+        <td style="font-size:11px;">
+          {{ item.created_at.strftime('%d %b %Y') }}
+        </td>
+        <td>
+          <a href="/admin/delete/{{ item.id }}"
+             onclick="return confirm('Delete this resource?')"
+             class="delete-btn">
+             ❌ Delete
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<a href="/admin/users" class="admin-link">
+  👥 View Registered Users
+</a>
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { getAuth, onAuthStateChanged }
+from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAlBxCfCnYj2yq2JV15WCBKT4WVrgSreME",
+  authDomain: "studysphere-917c7.firebaseapp.com",
+  projectId: "studysphere-917c7",
+  storageBucket: "studysphere-917c7.firebasestorage.app",
+  messagingSenderId: "101122711988",
+  appId: "1:101122711988:web:7a05f5d878fa7771a952e1"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+onAuthStateChanged(auth, (user) => {
+  if (!user || user.email !== "manojkumarmanojkumar08758@gmail.com") {
+    window.location.replace("/");
+  }
+});
+
+</script>
+</body>
+</html>

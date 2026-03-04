@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin | Registered Users</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 30px;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 900px;
+      background: #fff;
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      animation: fadeIn 0.6s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h2 {
+      text-align: center;
+      color: #203a43;
+      margin-bottom: 10px;
+    }
+
+    .count {
+      text-align: center;
+      font-size: 15px;
+      margin-bottom: 20px;
+      color: #555;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    thead {
+      background: #203a43;
+      color: #fff;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    tr:hover {
+      background: #f5f5f5;
+    }
+
+    .back-btn {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 16px;
+      background: linear-gradient(135deg, #ff8c00, #ff5e00);
+      color: white;
+      text-decoration: none;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+
+    .back-btn:hover {
+      box-shadow: 0 8px 20px rgba(255,140,0,0.4);
+    }
+  </style>
+
+</head>
+<body>
+
+<div class="container">
+
+  <h2>👥 Registered Users</h2>
+
+  <p class="count">
+    Total Users: <strong>{{ total_users }}</strong>
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Registered On</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for user in users %}
+      <tr>
+        <td>{{ user.name or "-" }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.registered_at.strftime('%d %b %Y') }}</td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="3" style="text-align:center; padding:20px;">
+          No users registered yet
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div style="text-align:center;">
+    <a href="/admin/upload" class="back-btn">⬅ Back to Admin Panel</a>
+  </div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { getAuth, onAuthStateChanged }
+from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAlBxCfCnYj2yq2JV15WCBKT4WVrgSreME",
+  authDomain: "studysphere-917c7.firebaseapp.com",
+  projectId: "studysphere-917c7",
+  storageBucket: "studysphere-917c7.firebasestorage.app",
+  messagingSenderId: "101122711988",
+  appId: "1:101122711988:web:7a05f5d878fa7771a952e1"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+onAuthStateChanged(auth, (user) => {
+  if (!user || user.email !== "manojkumarmanojkumar08758@gmail.com") {
+    window.location.replace("/");
+  }
+});
+
+</script>
+</body>
+</html>

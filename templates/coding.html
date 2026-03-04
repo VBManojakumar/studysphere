@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>StudySphere | Coding</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/resource.css') }}">
+</head>
+<body>
+
+<header class="top-header">
+  <h2>💻 Coding Prep</h2>
+<a href="javascript:history.back()" class="back-btn">⟵ Back</a>
+</header>
+<section class="resource-container">
+
+  {% for item in coding %}
+    <div class="resource-card">
+      <h3>{{ item.title }}</h3>
+
+      <iframe
+        src="{{ item.drive_link }}"
+        width="100%"
+        height="500"
+        style="border:none;">
+      </iframe>
+
+    </div>
+  {% endfor %}
+
+</section>
+
+
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Search Results</title>
+</head>
+<body>
+
+<h2>Search Results for "{{ q }}"</h2>
+
+{% if results and results|length > 0 %}
+
+  <ul>
+    {% for item in results %}
+      <li>
+        <a href="{{ item.link }}" target="_blank">
+          {{ item.title }}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+
+{% else %}
+  <p>❌ No results found.</p>
+{% endif %}
+
+<a href="/resource">⬅ Back</a>
+
+</body>
+</html>

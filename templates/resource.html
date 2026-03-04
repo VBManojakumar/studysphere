@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudySphere | Resources</title>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/resource.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<header class="top-header">
+  <h2>📚 StudySphere Resources</h2>
+
+  <h3 id="welcomeUser" style="text-align:center; margin-top:10px;">
+    Welcome 👋
+  </h3>
+<a href="/admin/upload">Admin Panel</a>
+  <div class="header-actions">
+    <a href="{{ url_for('resource_page') }}" class="nav-btn back-btn">⬅ Back</a>
+    <!-- ✅ FIXED LOGOUT -->
+    <a href="#" onclick="logout(); return false;" class="nav-btn logout-btn">Logout</a>
+  </div>
+
+  <form action="/search" method="get" class="search-box">
+    <input type="text" name="q" placeholder="Search materials, videos, papers..." required>
+    <button type="submit">🔍</button>
+  </form>
+</header>
+
+<section class="resource-container">
+
+  <div class="resource-card">
+    <h3>📘 Comprehensive Study Materials</h3>
+    <p>Access well-curated lecture notes, reference materials, and study guides.</p>
+    <a href="/materials" class="view-btn">View Materials</a>
+  </div>
+
+  <div class="resource-card">
+    <h3>🎥 Video Lectures</h3>
+    <p>Learn at your own pace with recorded video lectures.</p>
+    <a href="/videos" class="view-btn">Watch Now</a>
+  </div>
+
+  <div class="resource-card">
+    <h3>📄 Previous Year Papers</h3>
+    <p>Practice with authentic previous year question papers.</p>
+    <a href="/papers" class="view-btn">Download Papers</a>
+  </div>
+
+  <div class="resource-card">
+    <h3>🧠 Aptitude Training</h3>
+    <p>Sharpen your skills with aptitude tests and puzzles.</p>
+    <a href="/aptitude" class="view-btn">Start Practice</a>
+  </div>
+
+  <div class="resource-card">
+    <h3>💻 Coding Tutorials</h3>
+    <p>Master programming with step-by-step tutorials.</p>
+    <a href="/coding" class="view-btn">Start Coding</a>
+  </div>
+
+  <div class="resource-card">
+    <h3>🧩 Interview Preparation</h3>
+    <p>Get ready for placements with interview materials.</p>
+    <a href="/interview" class="view-btn">Prepare Now</a>
+  </div>
+
+</section>
+
+<!-- 🔥 FIREBASE AUTH + LOGOUT -->
+<script type="module">
+
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut }
+    from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAlBxCfCnYj2yq2JV15WCBKT4WVrgSreME",
+    authDomain: "studysphere-917c7.firebaseapp.com",
+    projectId: "studysphere-917c7",
+    storageBucket: "studysphere-917c7.firebasestorage.app",
+    messagingSenderId: "101122711988",
+    appId: "1:101122711988:web:7a05f5d878fa7771a952e1",
+    measurementId: "G-KFKLNZ5EJV"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  /* ✅ SINGLE AUTH LISTENER */
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      window.location.replace("/");
+    } else {
+
+      let name = user.displayName || user.email.split("@")[0];
+
+      document.getElementById("welcomeUser").innerText =
+        `Welcome ${name} to KU StudySphere 🎓`;
+
+      // 🔥 SEND REAL USER DATA TO FLASK (THIS WAS MISSING)
+      fetch("/save-user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name: name,
+          email: user.email
+        })
+      })
+      .then(res => res.json())
+      .then(data => console.log("User saved:", data))
+      .catch(err => console.error("Error saving user:", err));
+
+    }
+  });
+
+  /* ✅ LOGOUT FUNCTION */
+  window.logout = function () {
+    signOut(auth)
+      .then(() => {
+        alert("Logged out successfully!");
+        window.location.replace("/");
+      })
+      .catch((error) => {
+        alert("Logout failed: " + error.message);
+      });
+  };
+
+</script>
+</body>
+</html>

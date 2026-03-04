@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StudySphere | Videos</title>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/resource.css') }}">
+</head>
+
+<body>
+  <header class="top-header">
+    <h2>🎥 Select Videos</h2>
+<a href="javascript:history.back()" class="back-btn">⟵ Back</a>
+  </header>
+    <section class="resource-container">
+
+  {% if videos %}
+    {% for video in videos %}
+      <div class="resource-card">
+        <h3>{{ video.title }}</h3>
+
+        <iframe
+          src="{{ video.drive_link }}"
+          width="100%"
+          height="315"
+          style="border:none;"
+          allowfullscreen>
+        </iframe>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>No videos available.</p>
+  {% endif %}
+</section>
+</body>
+</html>

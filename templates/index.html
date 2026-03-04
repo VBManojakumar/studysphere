@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StudySphere | Smart Student-Centric Platform</title>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- ---------------- HERO SECTION ---------------- -->
+  <header class="hero-section">
+    <div class="overlay">
+      <nav class="navbar">
+        <div class="logo">StudySphere</div>
+        <ul class="nav-links">
+          <li><a href="#">Home</a></li>
+          <li><a href="#">Notes</a></li>
+          <li><a href="#">Coding</a></li>
+          <li><a href="#">Aptitude</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+        <button class="login-btn" id="openLogin">Login</button>
+      </nav>
+
+      <div class="hero-content">
+        <p class="tagline">🎓 All Your Learning Resources in One Place</p>
+        <h1>Welcome to <span>KU StudySphere</span></h1>
+        <p class="description">
+         A smart student-centric learning platform that unifies all your academic resources — from lecture notes to coding tutorials — in one seamless digital experience.
+        </p>
+
+        <div class="btn-group">
+          <button class="btn primary" id="openFromStart">Get Started →</button>
+        </div>
+      </div>
+    </div>
+
+  </header>
+
+
+  <!-- ---------------- LOGIN POPUP ---------------- -->
+  <div class="login-popup" id="loginPopup">
+    <div class="login-box">
+      <span class="close-btn" onclick="closePopup()">&times;</span>
+      <h2>Login</h2>
+
+      <form id="loginForm">
+        <input id="loginEmail" type="email" placeholder="Email" required />
+        <input id="loginPassword" type="password" placeholder="Password" required />
+
+        <div class="options">
+          <label class="remember"><input id="rememberMe" type="checkbox" /> Remember Me</label>
+          <a href="#" onclick="resetPassword()" class="forgot-link">Forgot Password?</a>
+        </div>
+
+        <button type="submit" class="submit-btn">Login</button>
+
+        <p class="register-text">
+          Don’t have an account?
+          <a href="#" onclick="openRegister()">Register Now</a>
+        </p>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- ---------------- REGISTER POPUP ---------------- -->
+  <div class="login-popup" id="registerPopup">
+    <div class="login-box">
+      <span class="close-btn" onclick="closePopup()">&times;</span>
+      <h2>Register</h2>
+
+      <form id="registerForm">
+        <input id="regName" type="text" placeholder="Full Name" required />
+        <input id="regEmail" type="email" placeholder="Email" required />
+        <input id="regPassword" type="password" placeholder="Password" required />
+        <button type="submit" class="submit-btn">Register</button>
+
+        <p class="register-text">
+          Already have an account?
+          <a href="#" onclick="openLogin()">Login</a>
+        </p>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- ---------------- FIREBASE AUTH SCRIPT ---------------- -->
+  <script type="module">
+  // FIREBASE IMPORTS
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+  import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    updateProfile,
+    signInWithEmailAndPassword,
+    sendPasswordResetEmail,
+    onAuthStateChanged,
+    signOut,
+    setPersistence,
+    browserLocalPersistence,
+    browserSessionPersistence
+  } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+
+  // FIREBASE CONFIG
+  const firebaseConfig = {
+    apiKey: "AIzaSyAlBxCfCnYj2yq2JV15WCBKT4WVrgSreME",
+    authDomain: "studysphere-917c7.firebaseapp.com",
+    projectId: "studysphere-917c7",
+    storageBucket: "studysphere-917c7.firebasestorage.app",
+    messagingSenderId: "101122711988",
+    appId: "1:101122711988:web:7a05f5d878fa7771a952e1",
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+
+    /* ---------------- AUTO LOGIN (REMEMBER ME) ---------------- */
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log("User Logged In Automatically:", user.email);
+        document.getElementById("loader").style.display = "block";
+setTimeout(() => {
+  window.location.href = "/resource";
+}, 1200);
+
+      }
+    });
+
+
+    /* ---------------- LOGIN FUNCTION ---------------- */
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const email = loginEmail.value;
+    const password = loginPassword.value;
+    const remember = rememberMe.checked;
+
+    await setPersistence(auth, remember ? browserLocalPersistence : browserSessionPersistence);
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        alert("Login Successful!");
+        document.getElementById("loader").style.display = "block";
+setTimeout(() => {
+  window.location.href = "/resource";
+}, 1200);
+
+      })
+      .catch((error) => alert(error.message));
+  });
+
+
+    /* ---------------- REGISTER FUNCTION ---------------- */
+document.getElementById("registerForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const name = regName.value;
+    const email = regEmail.value;
+    const password = regPassword.value;
+
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        return updateProfile(userCredential.user, { displayName: name });
+      })
+      .then(() => {
+        alert("Registration Successful! Please Login.");
+        openLogin();
+      })
+      .catch((error) => alert(error.message));
+  });
+
+
+
+    /* ---------------- FORGOT PASSWORD ---------------- */
+    window.resetPassword = function () {
+    const email = prompt("Enter your email:");
+    if (!email) return;
+    sendPasswordResetEmail(auth, email)
+      .then(() => alert("Password reset email sent."))
+      .catch((error) => alert(error.message));
+  };
+
+
+
+    /* ---------------- LOGOUT FUNCTION (USE ON resource.html) ---------------- */
+    window.logout = function () {
+    signOut(auth).then(() => {
+      alert("Logged out!");
+      window.location.href = "index.html";
+    });
+  };
+
+
+  </script>
+
+
+
+
+  <!-- ---------------- POPUP SCRIPT ---------------- -->
+  <script>
+    const popup = document.getElementById("loginPopup");
+    const registerPopup = document.getElementById("registerPopup");
+
+    document.getElementById("openLogin").onclick = () => popup.style.display = "flex";
+    document.getElementById("openFromStart").onclick = () => popup.style.display = "flex";
+
+    function openRegister() {
+      popup.style.display = "none";
+      registerPopup.style.display = "flex";
+    }
+
+    function openLogin() {
+      registerPopup.style.display = "none";
+      popup.style.display = "flex";
+    }
+
+    function closePopup() {
+      popup.style.display = "none";
+      registerPopup.style.display = "none";
+    }
+  </script>
+
+
+<script>
+  document.querySelectorAll(".btn, .view-btn").forEach(button => {
+    button.addEventListener("click", function (e) {
+      const ripple = document.createElement("span");
+      ripple.classList.add("ripple");
+      this.appendChild(ripple);
+
+      const rect = this.getBoundingClientRect();
+      ripple.style.left = `${e.clientX - rect.left}px`;
+      ripple.style.top = `${e.clientY - rect.top}px`;
+
+      setTimeout(() => ripple.remove(), 600);
+    });
+  });
+</script>
+<div id="loader" style="display:none;" class="loader"></div>
+
+<!-- ================= CONTACT SECTION ================= -->
+<section class="contact-section">
+  <div class="contact-container">
+
+    <h2>📞 Contact Us</h2>
+    <p class="contact-subtext">
+      Have questions or suggestions? We’d love to hear from you.
+    </p>
+
+    <div class="contact-grid">
+
+      <!-- Contact Info -->
+      <div class="contact-info">
+        <p><strong>📧 Email:</strong> studysphere.help@gmail.com</p>
+        <p><strong>📱 Phone:</strong> +91 9XXXXXXXXX</p>
+        <p><strong>📍 Location:</strong> Karnataka, India</p>
+      </div>
+
+      <!-- Contact Form -->
+      <form class="contact-form">
+        <input type="text" placeholder="Your Name" required>
+        <input type="email" placeholder="Your Email" required>
+        <textarea rows="4" placeholder="Your Message" required></textarea>
+        <button type="submit">Send Message</button>
+      </form>
+
+    </div>
+
+    <p class="copyright">
+      © 2026 StudySphere. All rights reserved.
+    </p>
+
+  </div>
+</section>
+<!-- ================= END CONTACT SECTION ================= -->
+<section class="contact-owner">
+  <img src="{{ url_for('static', filename='admin.jpg') }}" alt="Admin">
+
+  <h3>V B Manoj Kumar</h3>
+  <p>Founder & Developer of StudySphere</p>
+
+  <p>Email: studysphere.help@gmail.com</p>
+</section>
+
+
+</body>
+</html>

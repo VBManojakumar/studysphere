@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ branch.upper() }} | Semesters</title>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/resource.css') }}">
+</head>
+
+<body>
+
+  <header class="top-header">
+    <h2>{{ branch.upper() }} – All Semesters</h2>
+    <a href="/materials" class="back-btn">⟵ Back</a>
+  </header>
+
+  <section class="resource-container">
+
+    {% for sem in range(1, 7) %}
+    <div class="resource-card">
+      <h3>Semester {{ sem }}</h3>
+      <p>Study Materials</p>
+      <a href="/materials/{{ branch }}/{{ sem }}" class="view-btn">Open</a>
+    </div>
+    {% endfor %}
+
+  </section>
+
+</body>
+</html>

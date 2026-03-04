@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>StudySphere | Aptitude</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/resource.css') }}">
+</head>
+<body>
+
+<header class="top-header">
+  <h2>🧠 Aptitude Prep</h2>
+<a href="javascript:history.back()" class="back-btn">⟵ Back</a>
+</header>
+
+<section class="resource-container">
+
+  {% for item in aptitude %}
+    <div class="resource-card">
+      <h3>{{ item.title }}</h3>
+
+      <!-- External website -->
+      <a href="{{ item.drive_link }}" target="_blank" class="view-btn">
+        Open Aptitude Practice
+      </a>
+
+    </div>
+  {% endfor %}
+
+</section>
+</body>
+</html>
