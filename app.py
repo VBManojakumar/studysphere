@@ -1,5 +1,6 @@
 from flask import Flask, render_template,redirect, url_for, request,session
 import mysql.connector
+import os
 
 
 
@@ -8,12 +9,14 @@ app.secret_key = "studysphere_secret_key"
 ADMIN_EMAIL = "manojkumarmanojkumar08758@gmail.com"
 
 # ---------------- DATABASE ----------------
+
 def get_db():
     return mysql.connector.connect(
-        host="localhost",
-        user="studysphere",
-        password="studysphere123",
-        database="studysphere_db"
+        host=os.getenv("MYSQLHOST"),
+        user=os.getenv("MYSQLUSER"),
+        password=os.getenv("MYSQLPASSWORD"),
+        database=os.getenv("MYSQLDATABASE"),
+        port=int(os.getenv("MYSQLPORT"))
     )
 
 # ---------------- UPLOAD (ADMIN) ----------------
