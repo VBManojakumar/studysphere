@@ -12,13 +12,12 @@ ADMIN_EMAIL = "manojkumarmanojkumar08758@gmail.com"
 
 def get_db():
     return mysql.connector.connect(
-        host=os.getenv("MYSQLHOST"),
-        user=os.getenv("MYSQLUSER"),
-        password=os.getenv("MYSQLPASSWORD"),
-        database=os.getenv("MYSQLDATABASE"),
-        port=int(os.getenv("MYSQLPORT"))
+        host="hopper.proxy.rlwy.net",
+        user="root",
+        password="ClCTXWtytrEdTrLlEHcQOmfwioHVSlQv",
+        database="railway",
+        port=34168
     )
-
 # ---------------- UPLOAD (ADMIN) ----------------
 @app.route("/admin")
 def admin():
