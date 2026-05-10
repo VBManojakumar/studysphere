@@ -16,7 +16,8 @@ def get_db():
         user=os.getenv("MYSQLUSER"),
         password=os.getenv("MYSQLPASSWORD"),
         database=os.getenv("MYSQLDATABASE"),
-        port=int(os.getenv("MYSQLPORT"))
+        port=int(os.getenv("MYSQLPORT")),
+        connection_timeout=30
     )
 # ---------------- UPLOAD (ADMIN) ----------------
 @app.route("/admin")
