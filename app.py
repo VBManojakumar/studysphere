@@ -330,6 +330,23 @@ def logout():
 
     return redirect(url_for("home"))
 
+#----------------Temp--------------------
+@app.route("/test-db")
+def test_db():
+    try:
+        db = get_db()
+        cursor = db.cursor(cursor_factory=RealDictCursor)
+
+        cursor.execute("SELECT * FROM resources")
+        data = cursor.fetchall()
+
+        cursor.close()
+        db.close()
+
+        return {"status": "success", "data": data}
+
+    except Exception as e:
+        return {"error": str(e)}
 # ---------------- SAVE USER ----------------
 
 @app.route("/save-user", methods=["POST"])
