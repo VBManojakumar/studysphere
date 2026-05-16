@@ -1,7 +1,7 @@
 from flask import Flask, render_template,redirect, url_for, request,session
-import mysql.connector
+import psycopg2
 import os
-
+from psycopg2.extras import RealDictCursor
 
 
 app = Flask(__name__)
@@ -11,14 +11,7 @@ ADMIN_EMAIL = "manojkumarmanojkumar08758@gmail.com"
 # ---------------- DATABASE ----------------
 
 def get_db():
-    return mysql.connector.connect(
-        host=os.getenv("MYSQLHOST"),
-        user=os.getenv("MYSQLUSER"),
-        password=os.getenv("MYSQLPASSWORD"),
-        database=os.getenv("MYSQLDATABASE"),
-        port=int(os.getenv("MYSQLPORT")),
-        connection_timeout=30
-    )
+    return psycopg2.connect(os.getenv("DATABASE_URL"))
 # ---------------- UPLOAD (ADMIN) ----------------
 @app.route("/admin")
 def admin():
@@ -29,7 +22,7 @@ def admin_upload():
     # 🔐 Check admin access
         # ✅ ALWAYS create DB & cursor first
     db = get_db()
-    cursor = db.cursor(dictionary=True)
+    cursor = db.cursor(cursor_factory=RealDictCursor)
 
     # ---------------- HANDLE FORM SUBMIT ----------------
     if request.method == "POST":
@@ -72,7 +65,7 @@ def admin_upload():
 @app.route("/admin/delete/<int:id>")
 def delete_resource(id):
     db = get_db()
-    cursor = db.cursor()
+    cursor = db.cursor(cursor_factory=RealDictCursor)
 
     cursor.execute("DELETE FROM materials WHERE id = %s", (id,))
     db.commit()
@@ -93,7 +86,7 @@ def admin_users():
         return redirect("/")
 
     db = get_db()
-    cursor = db.cursor(dictionary=True)
+    cursor = db.cursor(cursor_factory=RealDictCursor)
 
     cursor.execute("""
         SELECT email, name, registered_at
@@ -121,13 +114,13 @@ def search():
     q = request.args.get("q")
 
     db = get_db()
-    cursor = db.cursor(dictionary=True)
+    cursor = db.cursor(cursor_factory=RealDictCursor)
 
     # 🔎 Search in resources
     cursor.execute("""
         SELECT title, drive_link AS link
         FROM resources
-        WHERE title LIKE %s
+        WHERE title ILIKE %s
     """, (f"%{q}%",))
 
     resource_results = cursor.fetchall()
@@ -136,7 +129,7 @@ def search():
     cursor.execute("""
         SELECT title, file_url AS link
         FROM materials
-        WHERE title LIKE %s
+        WHERE title ILIKE %s
     """, (f"%{q}%",))
 
     material_results = cursor.fetchall()
@@ -172,7 +165,7 @@ def materials_branch(branch):
 @app.route("/materials/<branch>/<int:sem>")
 def materials_sem(branch, sem):
     db = get_db()
-    cursor = db.cursor(dictionary=True)
+    cursor = db.cursor(cursor_factory=RealDictCursor)
 
     cursor.execute("""
         SELECT title, file_url
@@ -195,7 +188,7 @@ def materials_sem(branch, sem):
 @app.route("/videos")
 def videos():
     db = get_db()
-    cursor = db.cursor(dictionary=True)
+    cursor = db.cursor(cursor_factory=RealDictCursor)
 
     cursor.execute("""
         SELECT title, drive_link
@@ -222,14 +215,14 @@ def papers_branch(branch):
 @app.route("/papers/<branch>/<int:sem>")
 def papers_sem(branch, sem):
     db = get_db()
-    cursor = db.cursor(dictionary=True)
+    cursor = db.cursor(cursor_factory=RealDictCursor)
 
     cursor.execute("""
         SELECT title, drive_link
         FROM resources
         WHERE category='papers'
         AND branch=%s
-        AND semester=%s
+        AND sem=%s
     """, (branch, sem))
 
     files = cursor.fetchall()
@@ -242,7 +235,7 @@ def papers_sem(branch, sem):
 @app.route("/aptitude")
 def aptitude():
     db = get_db()
-    cursor = db.cursor(dictionary=True)
+    cursor = db.cursor(cursor_factory=RealDictCursor)
 
     cursor.execute("""
         SELECT title, drive_link
@@ -260,7 +253,7 @@ def aptitude():
 @app.route("/coding")
 def coding():
     db = get_db()
-    cursor = db.cursor(dictionary=True)
+    cursor = db.cursor(cursor_factory=RealDictCursor)
 
     cursor.execute("""
         SELECT title, drive_link
@@ -277,7 +270,7 @@ def coding():
 @app.route("/interview")
 def interview():
     db = get_db()
-    cursor = db.cursor(dictionary=True)
+    cursor = db.cursor(cursor_factory=RealDictCursor)
 
     cursor.execute("""
         SELECT title, drive_link
@@ -309,10 +302,10 @@ def save_user():
         return {"status": "error", "message": "Missing data"}, 400
 
     db = get_db()
-    cursor = db.cursor()
+    cursor = db.cursor(cursor_factory=RealDictCursor)
 
     cursor.execute("""
-        INSERT IGNORE INTO users (name, email)
+        INSERT INTO users (name, email)
         VALUES (%s, %s)
     """, (name, email))
 
