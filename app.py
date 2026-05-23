@@ -11,7 +11,10 @@ ADMIN_EMAIL = "manojkumarmanojkumar08758@gmail.com"
 # ---------------- DATABASE ----------------
 
 def get_db():
-    return psycopg2.connect(os.getenv("DATABASE_URL"))
+    return psycopg2.connect(
+        os.getenv("DATABASE_URL"),
+        sslmode="require"
+    )
 
 # ---------------- HOME ----------------
 
