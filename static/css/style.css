@@ -543,3 +543,48 @@ button {
     height: 350px;
     border: none;
 }
+.videos-container{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:30px;
+    padding:40px;
+}
+
+.video-card{
+    width:450px;
+    background:white;
+    padding:20px;
+    border-radius:20px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.2);
+}
+
+.video-card h2{
+    margin-bottom:15px;
+    color:#002366;
+}
+
+.video-frame iframe{
+    width:100%;
+    height:250px;
+    border:none;
+    border-radius:10px;
+}
+
+.top-bar{
+    background:#002366;
+    color:white;
+    padding:20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.back-btn{
+    background:orange;
+    color:white;
+    padding:10px 20px;
+    border-radius:10px;
+    text-decoration:none;
+    font-weight:bold;
+}

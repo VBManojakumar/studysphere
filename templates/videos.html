@@ -17,15 +17,17 @@
 
   {% if videos %}
     {% for video in videos %}
-      <div class="resource-card">
-        <h3>{{ video.title }}</h3>
+      <div class="video-card">
+
+        <h2>{{ video.title }}</h2>
 
         <div class="video-frame">
-    <iframe src="{{ video.drive_link }}"
-            >
-    </iframe>
-</div>
-      </div>
+            <iframe src="{{ video.drive_link }}"
+                    allowfullscreen>
+            </iframe>
+        </div>
+
+    </div>
     {% endfor %}
   {% else %}
     <p>No videos available.</p>
