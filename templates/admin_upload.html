@@ -163,19 +163,22 @@
           {{ item.created_at.strftime('%d %b %Y') }}
         </td>
         <td>
-          <a href="/admin/delete/{{ item.id }}"
-             onclick="return confirm('Delete this resource?')"
-             class="delete-btn">
-             ❌ Delete
-          </a>
+          <a href="/admin/delete/{{ item.id }}/resources"
+   class="delete-btn">
+   Delete
+</a>
+<a href="/admin/delete/{{ item.id }}/materials"
+   class="delete-btn">
+   Delete
+</a>
         </td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
 </div>
-<a href="/admin/users" class="admin-link">
-  👥 View Registered Users
+<a href="{{ url_for('admin_users') }}">
+   👥 View Registered Users
 </a>
 </div>
 

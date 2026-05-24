@@ -78,13 +78,16 @@ def admin_upload():
 
 # ---------------- DELETE ----------------
 
-@app.route("/admin/delete/<int:id>")
-def delete_resource(id):
+@app.route("/admin/delete/<int:id>/<table>")
+def delete_resource(id, table):
 
     db = get_db()
-    cursor = db.cursor(cursor_factory=RealDictCursor)
+    cursor = db.cursor()
 
-    cursor.execute("DELETE FROM materials WHERE id = %s", (id,))
+    if table == "materials":
+        cursor.execute("DELETE FROM materials WHERE id = %s", (id,))
+    else:
+        cursor.execute("DELETE FROM resources WHERE id = %s", (id,))
 
     db.commit()
 
