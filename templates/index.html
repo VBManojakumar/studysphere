@@ -102,8 +102,7 @@
     onAuthStateChanged,
     signOut,
     setPersistence,
-    browserLocalPersistence,
-    browserSessionPersistence
+    browserLocalPersistence
   } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
   // FIREBASE CONFIG
@@ -141,7 +140,7 @@ setTimeout(() => {
     const password = loginPassword.value;
     const remember = rememberMe.checked;
 
-    await setPersistence(auth, remember ? browserLocalPersistence : browserSessionPersistence);
+    await setPersistence(auth, browserLocalPersistence);
 
     signInWithEmailAndPassword(auth, email, password)
       .then(() => {
