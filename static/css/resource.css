@@ -249,3 +249,32 @@ body {
     font-size: 20px;
   }
 }
+.announcement-bar {
+    background: linear-gradient(90deg, #ff8800, #ff6600);
+    color: white;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 12px 0;
+}
+
+.scroll-text {
+    display: inline-block;
+    animation: scroll-left 18s linear infinite;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.scroll-text a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+@keyframes scroll-left {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(-100%);
+    }
+}
